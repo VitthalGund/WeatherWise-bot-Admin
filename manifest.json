@@ -1,0 +1,13 @@
+{
+  "name": "weather wise admin",
+  "description": "weather wise admin dashboard",
+  "version": "1.0.0",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "web_accessible_resources": ["tileset/*.json", "layer/*.json", "sound/*.ogg"]
+}
