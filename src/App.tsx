@@ -18,7 +18,7 @@ const ROLES = {
 export default function App() {
   return (
     <>
-      <Router>
+      <Router basename="/WeatherWise-bot-Admin">
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -66,7 +66,7 @@ export default function App() {
             </Route>
           </Route>
         </Routes>
-      </Router>
+      </Router >
 
 
     </>

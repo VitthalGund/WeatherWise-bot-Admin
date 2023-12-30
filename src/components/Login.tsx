@@ -21,8 +21,8 @@ export default function LogIn() {
     // const [localperist, setLocalPersist] = useState(persist == "true" ? true : false);
 
     const [user, setUser] = useState({
-        email: "TelegramBotAdmin@bot.com",
-        password: "BotAdmin@Vitthal29"
+        email: "",
+        password: ""
     });
 
     const onUserChange = (e: ChangeEvent<HTMLInputElement>) => {
