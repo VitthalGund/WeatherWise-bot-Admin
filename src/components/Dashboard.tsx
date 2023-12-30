@@ -2,19 +2,22 @@ import { useContext, useState } from 'react'
 import axios from '../api/axios';
 import UserContext from '../context/Auth/userContext.ts';
 import { AuthContext } from '../types/authContext.ts';
+import UserInfo from './UserInfo.tsx';
+import { User } from "../types/authContext.ts"
+
 
 const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
-    const [user, setUsers] = useState<boolean>(false);
+    const [user, setUsers] = useState<User[]>();
     const { auth } = useContext(UserContext) as AuthContext;
-    console.log(auth.accessToken)
+
     const getUsers = async () => {
-        const data = await axios.get("/admin/users", {
+        const resp = await axios.get("/admin/users", {
             headers: {
                 Authorization: auth.accessToken
             }
         })
-        // console.log(data)
+        setUsers(resp.data)
     }
     getUsers();
     return (
@@ -96,7 +99,7 @@ const Dashboard = () => {
                                                 </div>
 
                                                 <div className="mx-5">
-                                                    <h4 className="text-2xl font-semibold text-gray-700">8,282</h4>
+                                                    <h4 className="text-2xl font-semibold text-gray-700">{user?.length}</h4>
                                                     <div className="text-gray-500">Current Users</div>
                                                 </div>
                                             </div>
@@ -119,10 +122,10 @@ const Dashboard = () => {
                                                     <tr>
                                                         <th
                                                             className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                                            Name</th>
+                                                            Username</th>
                                                         <th
                                                             className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
-                                                            Title</th>
+                                                            Location</th>
                                                         <th
                                                             className="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
                                                             Status</th>
@@ -134,42 +137,14 @@ const Dashboard = () => {
                                                 </thead>
 
                                                 <tbody className="bg-white">
-                                                    <tr>
-                                                        <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                            <div className="flex items-center">
-                                                                <div className="flex-shrink-0 w-10 h-10">
-                                                                    <img className="w-10 h-10 rounded-full"
-                                                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                                                        alt="" />
-                                                                </div>
-
-                                                                <div className="ml-4">
-                                                                    <div className="text-sm font-medium leading-5 text-gray-900">John Doe
-                                                                    </div>
-                                                                    <div className="text-sm leading-5 text-gray-500">john@example.com</div>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-
-                                                        <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                            <div className="text-sm leading-5 text-gray-900">Software Engineer</div>
-                                                            <div className="text-sm leading-5 text-gray-500">Web dev</div>
-                                                        </td>
-
-                                                        <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                                            <span
-                                                                className="inline-flex px-2 text-xs font-semibold leading-5 text-green-800 bg-green-100 rounded-full">Active</span>
-                                                        </td>
-
-                                                        <td
-                                                            className="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
-                                                            Owner</td>
-
-                                                        <td
-                                                            className="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
-                                                            <a href="#" className="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                                        </td>
-                                                    </tr>
+                                                    {user?.map((item, key) => {
+                                                        return <UserInfo
+                                                            username={item.username}
+                                                            blocked={item.blocked}
+                                                            chatId={item.chatId}
+                                                            locationName={item.locationName}
+                                                            key={key} />
+                                                    })}
                                                 </tbody>
                                             </table>
                                         </div>

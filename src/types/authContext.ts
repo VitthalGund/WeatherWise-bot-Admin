@@ -17,3 +17,10 @@ export type AuthContext = {
   userData: userData;
   persist: string;
 };
+
+export type User = {
+  chatId: string;
+  username: string;
+  locationName: string;
+  blocked: boolean;
+};
