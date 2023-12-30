@@ -5,16 +5,15 @@ import { AuthContext } from '../types/authContext.ts';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const RequireAuth = ({ allowedRoles }: any) => {
-    const { auth, userData } = useContext(UserContext) as AuthContext;
+    const { auth } = useContext(UserContext) as AuthContext;
     const location = useLocation();
-    // console.log(auth?.roles == allowedRoles)
+    console.log(auth?.roles)
+    console.log(auth?.roles?.find(role => console.log(role)))
     return (
         <>
             {auth?.roles?.find(role => allowedRoles?.includes(role))
                 ? <Outlet />
-                : userData?.username
-                    ? <Navigate to="/loginwithgoogle" state={{ from: location }} replace />
-                    : <Navigate to="/login" state={{ from: location }} replace />
+                : <Navigate to="/" state={{ from: location }} replace />
             }
         </>
     )

@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState, useEffect, useContext } from "react";
 import axios from "../api/axios";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+import UserContext from '../context/Auth/userContext.ts';
+import { AuthContext } from "../types/authContext.ts";
 
 const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 export default function LogIn() {
-    // const router = useNavigate();
+    const router = useNavigate();
+    const { updateAuth } = useContext(UserContext) as AuthContext;
     const [showPassword, setShowPassword] = useState(false);
 
     const persist: string = "";
@@ -15,8 +18,8 @@ export default function LogIn() {
     }, [persist])
     const [localperist, setLocalPersist] = useState(persist == "true" ? true : false);
     const [user, setUser] = useState({
-        email: "",
-        password: ""
+        email: "TelegramBotAdmin@bot.com",
+        password: "BotAdmin@Vitthal29"
     });
 
     const onUserChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,20 +65,17 @@ export default function LogIn() {
                     success: "Login Successfully!",
                     error: "invalid credentials"
                 });
-            // console.log(resp);
-            if (resp.data.success && resp.data.isVerified) {
+            console.log(resp);
+            if (resp.data.success) {
+                updateAuth({ roles: [resp.data.roles], email: user.email, accessToken: resp.data.accessToken })
 
-                //Make sure to change this 
-                // router();
-            } else if (resp.data.success) {
-                toast.error("Your Profile is verified!");
-                toast.error("Try by changes password to verify account!");
+                router("/dashboard");
             } else {
                 toast.error(resp.data.message);
             }
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
-            toast.error(error.response.data.message);
+            toast.error(error);
         } finally {
             setLoading(false);
             setButtonDisable(false);

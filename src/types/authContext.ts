@@ -7,7 +7,6 @@ export type auth = {
   email: string;
   roles: string[];
   accessToken: string;
-  username: string;
 };
 
 export type AuthContext = {

@@ -40,16 +40,16 @@ export default function App() {
               </Suspense>
             } />
 
-            <Route caseSensitive={true} path="/dashboard" element={
-              <Suspense fallback={
-                <ReactLoading type="bars" color="#4338ca" className="flex justify-center items-center align-middle m-auto" />
-              }>
-                <Dashboard />
-              </Suspense>
-            } />
 
             {/* Protected route */}
-            <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+            <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+              <Route caseSensitive={true} path="/dashboard" element={
+                <Suspense fallback={
+                  <ReactLoading type="bars" color="#4338ca" className="flex justify-center items-center align-middle m-auto" />
+                }>
+                  <Dashboard />
+                </Suspense>
+              } />
             </Route>
           </Route>
         </Routes>
