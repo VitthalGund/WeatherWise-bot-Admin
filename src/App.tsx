@@ -6,6 +6,8 @@ import { Suspense } from "react";
 // import SignIn from "./components/Signup.tsx";
 import ReactLoading from "react-loading";
 import Dashboard from "./components/Dashboard.tsx";
+import "react-toastify/ReactToastify.css"
+import SignIn from "./components/Signup.tsx";
 
 const ROLES = {
   'User': 2001,
@@ -27,6 +29,14 @@ export default function App() {
                 <ReactLoading type="bars" color="#4338ca" className="flex justify-center items-center align-middle m-auto" />
               }>
                 <LogIn />
+              </Suspense>
+            } />
+
+            <Route caseSensitive={true} path="/signup" element={
+              <Suspense fallback={
+                <ReactLoading type="bars" color="#4338ca" className="flex justify-center items-center align-middle m-auto" />
+              }>
+                <SignIn />
               </Suspense>
             } />
 

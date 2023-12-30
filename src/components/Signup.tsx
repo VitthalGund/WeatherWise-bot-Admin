@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { ChangeEvent, useEffect, useState } from "react";
 // import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import axios from "axios";
+import axios from "../api/axios";
 
+const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 export default function SignIn() {
     // const router = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -20,12 +21,11 @@ export default function SignIn() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        const { username, email, password } = user;
-        const isUsernameValid = username.length > 2;
-        const isEmailValid = email.match(/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/);
+        const { email, password } = user;
+        const isEmailValid = pattern.test(email.toLowerCase())
         const isPasswordValid = password.length > 8;
 
-        setButtonDisable(!(isUsernameValid && isEmailValid && isPasswordValid));
+        setButtonDisable(!(isEmailValid && isPasswordValid));
     }, [user]);
 
     const onUserChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +46,7 @@ export default function SignIn() {
 
     const handleClickConfirmPassword = () => {
 
-        if (showPassword) {
+        if (showConfirmPassword) {
             setConfirmPassword(false)
         } else {
             setConfirmPassword(true)
@@ -62,8 +62,8 @@ export default function SignIn() {
             setLoading(true);
             setButtonDisable(true);
             const resp = await toast.promise(
-                axios.post("/register",
-                    { username: user.username, email: user.email, password: user.password },
+                axios.post("/admin/register",
+                    { email: user.email, password: user.password },
                     {
                         headers: { "Content-Type": "application/json" },
                         withCredentials: true
@@ -73,6 +73,7 @@ export default function SignIn() {
                     success: "User Account Created Successfully!",
                     error: "unable create account,try again later!"
                 });
+            console.log(resp)
             if (resp.data.success) {
                 toast.success("Check your Email to verify the account!");
             } else {
@@ -112,12 +113,12 @@ export default function SignIn() {
                             <h2 className="font-bold text-2xl text-[#002D74]">{loading ? "Processing" : "SignUp"}</h2>
                             <p className="text-sm mt-4 text-[#002D74]">An account allows users to enjoy all the services without any ads for free!So lets create one</p>
                             <form className="flex flex-col gap-4">
-                                <input type="text" name="username" placeholder="@username" className="p-2 mt-8 rounded-xl border-0  w-full"
+                                {/* <input type="text" name="username" placeholder="@username" className="p-2 mt-8 rounded-xl border-0  w-full"
                                     value={user.username}
                                     onChange={(e) => onUserChange(e)}
                                     autoComplete="on"
-                                />
-                                <input type="email" name="email" placeholder="Email" className="p-2 rounded-xl border-0  w-full"
+                                /> */}
+                                <input type="email" name="email" placeholder="Email" className="p-2 mt-6 rounded-xl border-0  w-full"
                                     value={user.email}
                                     onChange={(e) => onUserChange(e)}
                                     autoComplete="on"
@@ -149,13 +150,13 @@ export default function SignIn() {
                                 <div className="relative">
                                     <input
                                         type={showConfirmPassword ? "text" : "password"}
-                                        name="password" placeholder="Password" className="p-2 rounded-xl border-0 w-full"
+                                        name="confirmPassword" placeholder="Password" className="p-2 rounded-xl border-0 w-full"
                                         value={user.confirmPassword}
                                         onChange={(e) => onUserChange(e)}
                                         autoComplete="on"
                                     />
                                     <div
-                                        id='password'
+                                        id='confirmPassword'
                                         className="icon_button absolute right-4 top-14 cursor-pointer"
                                         onClick={handleClickConfirmPassword}
                                     >

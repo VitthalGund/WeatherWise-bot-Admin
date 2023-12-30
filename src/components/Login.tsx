@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { ChangeEvent, useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../api/axios";
 // import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 
-
+const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 export default function LogIn() {
     // const router = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
@@ -28,9 +28,9 @@ export default function LogIn() {
 
     useEffect(() => {
         const { email, password } = user;
-        const isEmailValid = email.match(/^[a-z0-9]+@[a-z]+\.[a-z]{2,3}$/);
+        const isEmailValid = pattern.test(email)
         const isPasswordValid = password.length > 8;
-
+        // console.log({ isEmailValid, isPasswordValid })
         setButtonDisable(!(isEmailValid && isPasswordValid));
     }, [user]);
 
@@ -51,11 +51,11 @@ export default function LogIn() {
         try {
             setLoading(true);
             setButtonDisable(true);
-            const resp = await toast.promise(axios.post("/auth",
+            const resp = await toast.promise(axios.post("/admin/login",
                 { email: user.email, password: user.password },
                 {
                     headers: { "Content-Type": "application/json" },
-                    withCredentials: true
+                    // withCredentials: true
                 }),
                 {
                     pending: "validating your credentials!",
@@ -168,14 +168,14 @@ export default function LogIn() {
                                 </p>
                             </div> */}
 
-                            {/* <div className="text-sm flex items-center justify-center mt-3">
+                            <div className="text-sm flex items-center justify-center mt-3">
                                 <p>Don&apos;t have an account?</p>
                                 <Link
                                     className="text-blue-600 px-1 text-base"
                                     // className="bg-blue border-0 py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300"
                                     to={"/signup"}
                                 >Register</Link>
-                            </div> */}
+                            </div>
                         </div>
 
                         {/* <!--       Image --> */}
