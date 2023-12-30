@@ -8,6 +8,7 @@ import ReactLoading from "react-loading";
 import Dashboard from "./components/Dashboard.tsx";
 import "react-toastify/ReactToastify.css"
 import SignIn from "./components/Signup.tsx";
+import { ToastContainer } from "react-toastify";
 
 const ROLES = {
   'User': 2001,
@@ -18,6 +19,18 @@ export default function App() {
   return (
     <>
       <Router>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
 
         <Routes>
 

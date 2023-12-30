@@ -1,25 +1,55 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import axios from '../api/axios';
 import UserContext from '../context/Auth/userContext.ts';
 import { AuthContext } from '../types/authContext.ts';
 import UserInfo from './UserInfo.tsx';
 import { User } from "../types/authContext.ts"
+import { toast } from 'react-toastify';
 
 
 const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     const [user, setUsers] = useState<User[]>();
     const { auth } = useContext(UserContext) as AuthContext;
+    // console.log(auth.accessToken)
+    document.addEventListener("UserDeleted", (e) => {
+        console.log(e)
+    })
+    useEffect(() => {
+        const getUsers = async () => {
+            const resp = await axios.get("/admin/users", {
+                headers: {
+                    Authorization: auth.accessToken
+                }
+            })
+            setUsers(resp.data)
+        }
+        getUsers();
+    }, [auth.accessToken])
 
-    const getUsers = async () => {
-        const resp = await axios.get("/admin/users", {
-            headers: {
-                Authorization: auth.accessToken
+    async function handleDeleteUser(chatId: string) {
+        const d = toast.info("Processing");
+        try {
+            const resp = await axios.delete('/admin/user', { headers: { Authorization: auth.accessToken }, data: { chatId } })
+            const event = new CustomEvent('deleted', {
+                detail: {
+                    chatId
+                }
+            })
+            dispatchEvent(event);
+            if (resp.data.success) {
+                toast.success(resp.data.message);
+                setUsers(user?.filter((item) => item.chatId !== chatId))
+            } else {
+                toast.error(resp.data.message);
             }
-        })
-        setUsers(resp.data)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast.error(error.response.data.message);
+        } finally {
+            toast.dismiss(d);
+        }
     }
-    getUsers();
     return (
         <>
             <div>
@@ -139,6 +169,7 @@ const Dashboard = () => {
                                                 <tbody className="bg-white">
                                                     {user?.map((item, key) => {
                                                         return <UserInfo
+                                                            handleDeleteUser={handleDeleteUser}
                                                             username={item.username}
                                                             blocked={item.blocked}
                                                             chatId={item.chatId}

@@ -23,4 +23,6 @@ export type User = {
   username: string;
   locationName: string;
   blocked: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  handleDeleteUser: (chatId: string) => Promise<any>;
 };

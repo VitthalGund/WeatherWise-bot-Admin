@@ -1,6 +1,34 @@
 
-import { User } from "../types/authContext"
-const UserInfo = ({ username, chatId, locationName, blocked }: User) => {
+import axios from "../api/axios"
+import { AuthContext, User } from "../types/authContext"
+import UserContext from "../context/Auth/userContext"
+import { useContext } from "react"
+import { toast } from "react-toastify"
+
+const UserInfo = ({ username, chatId, locationName, blocked, handleDeleteUser }: User) => {
+    const { auth } = useContext(UserContext) as AuthContext;
+    async function handleBlockUser() {
+        const d = toast.info("Processing");
+        try {
+            const resp = await axios.post(`/admin/${blocked ? "unblockUser" : "blockUser"}`, {
+                chatId: chatId
+            }, { headers: { Authorization: auth.accessToken } })
+
+            if (resp.data.success) {
+                toast.success(resp.data.message);
+            } else {
+                toast.error(resp.data.message);
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            toast.error(error.response.data.message);
+        } finally {
+            toast.dismiss(d);
+        }
+    }
+
+
 
     return (
         <>
@@ -9,7 +37,7 @@ const UserInfo = ({ username, chatId, locationName, blocked }: User) => {
                     <div className="flex items-center">
                         <div className="flex-shrink-0 w-10 h-10">
                             <img className="w-10 h-10 rounded-full"
-                                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                                src={`https://api.multiavatar.com/${username}.svg`}
                                 alt="" />
                         </div>
 
@@ -23,7 +51,7 @@ const UserInfo = ({ username, chatId, locationName, blocked }: User) => {
 
                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                     <div className="text-sm leading-5 text-gray-900">{locationName}</div>
-                    <div className="text-sm leading-5 text-gray-500">Web dev</div>
+                    {/* <div className="text-sm leading-5 text-gray-500">Web dev</div> */}
                 </td>
 
                 <td className="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -36,8 +64,11 @@ const UserInfo = ({ username, chatId, locationName, blocked }: User) => {
                     Owner</td>
 
                 <td
-                    className="px-6 py-4 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
-                    <a href="#" className="text-indigo-600 hover:text-indigo-900">Edit</a>
+                    className="px-6 py-1 text-sm font-medium leading-5 text-right whitespace-no-wrap border-b border-gray-200">
+                    <div className="flex">
+                        <button onClick={handleBlockUser} className="text-indigo-600 hover:text-indigo-900 mx-6">{blocked ? "unblock" : "block"}</button>
+                        <button onClick={() => handleDeleteUser(chatId)} className="text-red-600 hover:text-red-900">Delete</button>
+                    </div>
                 </td>
             </tr>
         </>
