@@ -1,13 +1,20 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import axios from '../api/axios';
+import UserContext from '../context/Auth/userContext.ts';
+import { AuthContext } from '../types/authContext.ts';
 
 const Dashboard = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     const [user, setUsers] = useState<boolean>(false);
-
+    const { auth } = useContext(UserContext) as AuthContext;
+    console.log(auth.accessToken)
     const getUsers = async () => {
-        const data = await axios.get("/admin/users")
-        console.log(data)
+        const data = await axios.get("/admin/users", {
+            headers: {
+                Authorization: auth.accessToken
+            }
+        })
+        // console.log(data)
     }
     getUsers();
     return (

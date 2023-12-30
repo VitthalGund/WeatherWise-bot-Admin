@@ -7,8 +7,7 @@ import { AuthContext } from '../types/authContext.ts';
 const RequireAuth = ({ allowedRoles }: any) => {
     const { auth } = useContext(UserContext) as AuthContext;
     const location = useLocation();
-    console.log(auth?.roles)
-    console.log(auth?.roles?.find(role => console.log(role)))
+
     return (
         <>
             {auth?.roles?.find(role => allowedRoles?.includes(role))

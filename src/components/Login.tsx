@@ -65,7 +65,7 @@ export default function LogIn() {
                     success: "Login Successfully!",
                     error: "invalid credentials"
                 });
-            console.log(resp);
+            // console.log(resp.data)
             if (resp.data.success) {
                 updateAuth({ roles: [resp.data.roles], email: user.email, accessToken: resp.data.accessToken })
 
