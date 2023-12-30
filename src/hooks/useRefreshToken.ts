@@ -10,12 +10,11 @@ const useRefreshToken = () => {
 
   const refresh = async () => {
     const response = await axios.get("/refresh", {
-      withCredentials: true,
+      // withCredentials: true,
     });
     updateAuth({
       ...auth,
       accessToken: response.data.accessToken,
-      username: response.data.username,
       email: response.data.email,
       roles: response.data.roles,
     });
