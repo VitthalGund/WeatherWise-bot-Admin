@@ -109,7 +109,7 @@ export default function SignIn() {
                     {/* <!--     Login Container --> */}
                     <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-3xl p-5 items-center">
                         {/* <!--       Form --> */}
-                        <div className="md:w-1/1 px-16">
+                        <div className="sm:w-1/1 px-10">
                             <h2 className="font-bold text-2xl text-[#002D74]">{loading ? "Processing" : "SignUp"}</h2>
                             <p className="text-sm mt-4 text-[#002D74]">An account allows users to enjoy all the services without any ads for free!So lets create one</p>
                             <form className="flex flex-col gap-4">

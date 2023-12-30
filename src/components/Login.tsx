@@ -1,7 +1,7 @@
 // import { Link } from "react-router-dom";
 import { ChangeEvent, useState, useEffect, useContext } from "react";
 import axios from "../api/axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import UserContext from '../context/Auth/userContext.ts';
 import { AuthContext } from "../types/authContext.ts";
@@ -121,9 +121,9 @@ export default function LogIn() {
                     {/* <!--     Login Container --> */}
                     <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-5xl p-5 items-center">
                         {/* <!--       Form --> */}
-                        <div className="sm:w-1/3 px-10">
-                            <h2 className="font-bold text-2xl text-[#002D74]">{loading ? "Processing" : "Login"}</h2>
-                            <p className="text-sm mt-4 text-[#002D74]">An account allows users to enjoy all the services without any ads for free!</p>
+                        <div className="sm:w-1/1 px-10">
+                            <h2 className="font-bold text-2xl text-[#002D74]">{loading ? "Processing" : "Admin Login"}</h2>
+                            <p className="text-sm mt-4 text-[#002D74]">Admin login allow admin to mange their services effectively</p>
 
                             <form action="" className="flex flex-col gap-4">
                                 <input type="email" name="email" placeholder="Email" className="p-2 mt-8 rounded-xl border-0 w-full"
@@ -190,18 +190,18 @@ export default function LogIn() {
                                 </p>
                             </div> */}
 
-                            {/* <div className="text-sm flex items-center justify-center mt-3">
+                            <div className="text-sm flex items-center justify-center mt-3">
                                 <p>Don&apos;t have an account?</p>
                                 <Link
                                     className="text-blue-600 px-1 text-base"
                                     // className="bg-blue border-0 py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300"
                                     to={"/signup"}
                                 >Register</Link>
-                            </div> */}
+                            </div>
                         </div>
 
                         {/* <!--       Image --> */}
-                        <div className="md:block hidden w-1/2 p-5">
+                        <div className="md:block hidden w-1/2 p-5 sm:hidden">
                             <img src="https://picsum.photos/600/900" alt="img" width={600} height={900} style={{ borderRadius: "15px" }} />
                         </div>
                     </div>
