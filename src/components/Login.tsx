@@ -68,7 +68,6 @@ export default function LogIn() {
                     success: "Login Successfully!",
                     error: "invalid credentials"
                 });
-            // console.log(resp.data)
             if (resp.data.success) {
                 updateAuth({ roles: [resp.data.roles], email: user.email, accessToken: resp.data.accessToken })
 
@@ -95,7 +94,7 @@ export default function LogIn() {
             roles: credentails.data.roles,
             accessToken: credentails.data.accessToken
         });
-        toast.success("Login Successfully!")
+        toast.success(credentails.data.message)
         router("/")
     }
     const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });

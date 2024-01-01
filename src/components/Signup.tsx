@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { ChangeEvent, useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "../api/axios";
 
 const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 export default function SignIn() {
-    // const router = useNavigate();
+    const router = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setConfirmPassword] = useState(false);
 
@@ -61,21 +61,18 @@ export default function SignIn() {
         try {
             setLoading(true);
             setButtonDisable(true);
-            const resp = await toast.promise(
+            const resp = await
                 axios.post("/admin/register",
                     { email: user.email, password: user.password },
                     {
                         headers: { "Content-Type": "application/json" },
-                        withCredentials: true
-                    }),
-                {
-                    pending: "Creating your Account!",
-                    success: "User Account Created Successfully!",
-                    error: "unable create account,try again later!"
-                });
+                        // withCredentials: true
+                    })
             console.log(resp)
             if (resp.data.success) {
-                toast.success("Check your Email to verify the account!");
+                toast.success("User Account Created Successfully!");
+                router("/")
+
             } else {
                 toast.error(resp.data.error);
             }
